@@ -69,7 +69,7 @@ print('Gyroscope ID:       0x{0:02X}\n'.format(gyro))
 UDP_IP = "192.168.137.1"
 UDP_PORT = 5005
 
-#Time = np.zeros(10)
+#Time = np.zeros(2000)
 xValues = np.zeros(2000)
 yValues = np.zeros(2000)
 zValues = np.zeros(2000)
@@ -108,8 +108,6 @@ while True:
    #if x < Cut:
      #   x = 0        
    # Velocity = Velocity + x
-   # if x == 0:
-   #     Velocity = Velocity
    # if Velocity < CutVel:
    #     Velocity = 0
    # Distance = Distance + Velocity
@@ -121,16 +119,19 @@ while True:
   #  if i == 10:
    #     i = 0
     #    print (Time)   
-    #time.sleep(0.2)
+    time.sleep(0.01)
    
    # print ("Velocity:", Velocity)
    # print ("Distance:", Distance)
+
 print(xValues)
 print(yValues)
 print(zValues)  
-np.savetxt('xStill.out', xValues, delimiter=',')   # X is an array
-np.savetxt('yStill.out', yValues, delimiter=',')
-np.savetxt('zStill.out', zValues, delimiter=',')
+#print(Time)
+np.savetxt('xMoving.out', xValues, delimiter=',')   # X is an array
+np.savetxt('yMoving.out', yValues, delimiter=',')
+np.savetxt('zMoving.out', zValues, delimiter=',')
+#np.savetxt('Time.out', Time, delimiter=',')
  # Other values you can optionally read:
     # Orientation as a quaternion:
     #x,y,z,w = bno.read_quaterion()
