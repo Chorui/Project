@@ -69,6 +69,7 @@ print('Gyroscope ID:       0x{0:02X}\n'.format(gyro))
 UDP_IP = "192.168.137.1"
 UDP_PORT = 5005
 
+#FOR SAVING ARRAYS
 #Time = np.zeros(2000)
 xValues = np.zeros(2000)
 yValues = np.zeros(2000)
@@ -77,13 +78,25 @@ zValues = np.zeros(2000)
 print('Reading BNO055 data, press Ctrl-C to quit...')
 
 i = 0
-timeout = time.time() + 60/3 #1 minutes from now
-
 #Velocity = 0
 #Distance = 0
 #Cut = 0
 #CutVel = 0
 
+
+#SETUP
+print('CALIBRATION PHASE')
+while True:
+    sys, gyro, accel, mag = bno.get_calibration_status()
+    time.sleep(1)
+    print('Sys: %d Gyro: %d Accel: %d Mag: %d' %(sys,gyro,accel,mag))
+    if sys == 3 and gyro == 3 and accel == 3 and mag == 3:
+        print('Calibrated.')       
+        break
+
+timeout = time.time() + 60/3 #20 seconds from now
+
+#MAIN LOOP
 while True:
     test = 0 
     if test == 5 or time.time() > timeout:
@@ -96,9 +109,8 @@ while True:
     # Read the accelerometer data!
     x,y,z = bno.read_linear_acceleration() 
     # Print everything out.
-    MESSAGE = ('Heading={0:0.2F} Roll={1:0.2F} Pitch={2:0.2F} Sys_cal={3} Gyro_cal={4} Accel_cal={5} Mag_cal={6} x={7} y={8} z={9}'.format(
-          heading, roll, pitch, sys, gyro, accel, mag, x, y, z))
-    print("message:", MESSAGE)
+    MESSAGE = ('Heading={0:7.2F} | Roll={1:7.2F} | Pitch={2:7.2F} | x={3:6.2F} | y={4:6.2F} | z={5:6.2F}'.format(heading, roll, pitch, x, y, z))
+    print(MESSAGE)
    
     xValues[i] = x
     yValues[i] = y
@@ -114,12 +126,10 @@ while True:
     sock = socket.socket(socket.AF_INET, # Internet
                      socket.SOCK_DGRAM) # UDP
     sock.sendto(MESSAGE.encode('utf-8'), (UDP_IP, UDP_PORT))
-  #  Time[i] = x
-  #  i += 1
-  #  if i == 10:
+  #  Time[i] = x i += 1 if i == 10:
    #     i = 0
     #    print (Time)   
-    time.sleep(0.01)
+    time.sleep(0.01)  #0.01 is the optimum
    
    # print ("Velocity:", Velocity)
    # print ("Distance:", Distance)
@@ -128,9 +138,9 @@ print(xValues)
 print(yValues)
 print(zValues)  
 #print(Time)
-np.savetxt('xMoving.out', xValues, delimiter=',')   # X is an array
-np.savetxt('yMoving.out', yValues, delimiter=',')
-np.savetxt('zMoving.out', zValues, delimiter=',')
+np.savetxt('xCalibrated.out', xValues, delimiter=',')   # X is an array
+np.savetxt('yCalibrated.out', yValues, delimiter=',')
+np.savetxt('zCalibrated.out', zValues, delimiter=',')
 #np.savetxt('Time.out', Time, delimiter=',')
  # Other values you can optionally read:
     # Orientation as a quaternion:
