@@ -138,9 +138,9 @@ print(xValues)
 print(yValues)
 print(zValues)  
 #print(Time)
-np.savetxt('xCalibrated.out', xValues, delimiter=',')   # X is an array
-np.savetxt('yCalibrated.out', yValues, delimiter=',')
-np.savetxt('zCalibrated.out', zValues, delimiter=',')
+np.savetxt('xArc.out', xValues, delimiter=',')   # X is an array
+np.savetxt('yArc.out', yValues, delimiter=',')
+np.savetxt('zArc.out', zValues, delimiter=',')
 #np.savetxt('Time.out', Time, delimiter=',')
  # Other values you can optionally read:
     # Orientation as a quaternion:
